@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var jwtVerifer = require('express-jwt');
 
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({extended:false}));
+//app.use(bodyParser.urlencoded({extended:false}));
 
 var secret = "mySecret";
 
@@ -38,12 +38,6 @@ app.get('/', jwtVerifer({secret:secret}), (req, res) => {
   res.send('Imas pristup sajtu');
 });
 
-app.use((err, req, res, next) => {
-  if(err.name === 'UnauthorizedError') {
-    res.send('Nemas pristup, saljem te na login formu. ('+err.message+')');
-  }
-});
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -51,6 +45,9 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  if(err.name === 'UnauthorizedError') {
+    return res.send('Nemas pristup, saljem te na login formu. ('+err.message+')');
+  }
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
