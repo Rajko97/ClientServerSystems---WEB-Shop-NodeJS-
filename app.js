@@ -1,18 +1,24 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-//var bodyParser = require('body-parser');
-var jwt = require('jsonwebtoken');
-var jwtVerifer = require('express-jwt');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const jwt = require('jsonwebtoken');
+const jwtVerifer = require('express-jwt');
+const mongoose= require('mongoose');
+const constants = require('./constants');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+mongoose.connect(constants.dbPath, {useNewUrlParser:true});
 
-var app = express();
+if(constants.initalizeDB) {
+  require('./sources/init');
+}
 
-// view engine setup
+const loginRouter = require('./routes/login');
+const menuRouter = require('./routes/menu');
+
+const app = express();
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -21,29 +27,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(bodyParser.urlencoded({extended:false}));
-
-var secret = "mySecret";
 
 app.post('/login', (req, res) => {
-  if(req.body.username == "milos.kosanovic" && req.body.password == "vts2019") {
-    let token = jwt.sign({userID: "milos.kosanovic"}, secret);
-    res.send(token);
+  if(req.body.tableID != null  && req.body.password == "vts2019") {
+    let token = jwt.sign({tableID: req.body.tableID}, constants.jwt_secret);
+    res.send({token: token});
   } else {
     res.sendStatus(400);
   }
 });
 
-app.get('/', jwtVerifer({secret:secret}), (req, res) => {
-  res.send('Imas pristup sajtu');
-});
+app.use('/menu', jwtVerifer({secret:constants.jwt_secret}), menuRouter);
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function(err, req, res, next) {
   if(err.name === 'UnauthorizedError') {
     return res.send('Nemas pristup, saljem te na login formu. ('+err.message+')');
