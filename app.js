@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const jwt = require('jsonwebtoken');
 const jwtVerifer = require('express-jwt');
 const mongoose= require('mongoose');
 const constants = require('./constants');
@@ -28,15 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.post('/login', (req, res) => {
-  if(req.body.tableID != null  && req.body.password == "vts2019") {
-    let token = jwt.sign({tableID: req.body.tableID}, constants.jwt_secret);
-    res.send({token: token});
-  } else {
-    res.sendStatus(400);
-  }
-});
-
+app.use('/login', loginRouter);
 app.use('/menu', jwtVerifer({secret:constants.jwt_secret}), menuRouter);
 
 app.use(function(req, res, next) {

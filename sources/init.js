@@ -5,7 +5,6 @@ const menuData = './sources/menu.json';
 menuModel.collection.drop();
 
 async function insertData() {
-    console.log('done');
     try {
         await insertMenu();
     } catch (error) {
