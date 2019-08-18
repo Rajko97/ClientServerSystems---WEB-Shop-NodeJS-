@@ -1,0 +1,25 @@
+//- Navbar mixins
+mixin nav(title, style, type)
+    -var style = (typeof style === 'undefined') ? "default" : style
+    nav(role="navigation", class=["navbar", "navbar-"+style])
+        a.navbar-brand(href="#")=title
+        if type == 1
+            button.navbar-text.btn.btn-danger.pull-right.logoutBtn Odjavi se
+//- End navbar mixins
+
+//- panel mixins
+mixin panel(tableID, postedAt, style)
+    -var style = (typeof style === 'undefined') ? "default" : style
+    -let date = new Date(postedAt)
+    -let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    -let minutesPrefix = date.getMinutes()<10?'0':'';
+    -let formated = months[date.getMonth()]+' '+date.getDate()+', '+date.getFullYear()+' - '+ date.getHours()+':'+minutesPrefix+ date.getMinutes()
+
+    div(class=["panel", "panel-" + style] )
+        .panel-heading.div
+            .pull-left='Narudžbina za sto broj: '+tableID
+            .pull-right=' Vreme: ' + formated
+            .clearfix
+        .panel-body
+            block
+//- panel mixins

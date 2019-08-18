@@ -6,7 +6,7 @@ const menuModel = require('../model/menu');
 router.get('/', function(req, res, next) {
   waitForDataBeingReady()
     .then(data => 
-      res.send(data)
+      res.render('index', {title: 'VTS Restaurant', data:data})
     );
 });
 
