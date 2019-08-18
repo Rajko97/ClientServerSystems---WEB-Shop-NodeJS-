@@ -6,39 +6,31 @@ const menuModel = require('../model/menu');
 router.get('/', function(req, res, next) {
   waitForDataBeingReady()
     .then(data => 
-     res.send(data)
+      res.send(data)
     );
 });
 
 function waitForDataBeingReady() {
   return new Promise((res, rej) => {
-    ordersModel.find((err, docs) => {
-      res(waitForEachOrderInOrders(docs));
+    ordersModel.find(async (err, docs) => {
+      const result = [];
+      for (const item of docs) {
+        result.push(await createReformatedOrder(JSON.parse(JSON.stringify(item))));  
+      }
+      res(result);    
     });
   });
 }
 
-async function waitForEachOrderInOrders(docs) {
-  let resault = [];
-  for (let i in docs) {
-    resault.push(await createReformatedOrder(JSON.parse(JSON.stringify(docs[i]))));  
-  }
-  return resault;
-}
-
 async function createReformatedOrder(clientOrder) {
-  let postedAt = clientOrder.posted;
-  let tableId = clientOrder.tableId;
-  let formatedOrders = [];
+  const postedAt = clientOrder['posted'];
+  const tableId = clientOrder['tableId'];
+  const formatedOrders = [];
   
-  for (let i in clientOrder.orders) {
-    try {
-      let formatedOrder = await getNamePriceFromID(clientOrder.orders[i]._id);
-      formatedOrder['count'] = clientOrder.orders[i]['count'];
+  for (const order of clientOrder.orders) {
+      const formatedOrder = await getNamePriceFromID(order['_id']);
+      formatedOrder['count'] = order['count'];
       formatedOrders.push(formatedOrder);
-    } catch (err) {
-      //console.log(clientOrder);
-    }
   }
   return {postedAt: postedAt, tableId: tableId, orders: formatedOrders}
 }
@@ -46,10 +38,7 @@ async function createReformatedOrder(clientOrder) {
 function getNamePriceFromID(orderId) {
   return new Promise((res, rej) => {
     menuModel.findById(orderId, (err, doc) => {
-      if (err || doc == null) {
-        rej('Greska'); //todo WTF ovi null docs
-      }
-      else res({name: doc.name, price: doc.price});
+      res({name: doc.name, price: doc.price});
     });
   });
 }
