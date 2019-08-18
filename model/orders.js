@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
     },
     count: {
         type: Number,
-        min: 0,
+        min: 1,
         required:true
     }
 });

@@ -16,6 +16,7 @@ if(constants.initalizeDB) {
 const loginRouter = require('./routes/login');
 const menuRouter = require('./routes/menu');
 const orderRouter = require('./routes/order');
+const indexRouter = require('./routes/index');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/login', loginRouter);
 app.use('/menu', jwtVerifer({secret:constants.jwt_secret}), menuRouter);
 app.use('/order', jwtVerifer({secret:constants.jwt_secret}), orderRouter);
+app.use('/', indexRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

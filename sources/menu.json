@@ -1,30 +1,30 @@
 [
    {
-      "category": "pica",
+      "category": "hrana",
       "name": "Capricciosa",
       "desc": "Paradajz pelat, kackavalj, sunka, sampionjoni",
       "price": 520.0
    },
    {
-      "category": "pica",
+      "category": "hrana",
       "name": "Margherita",
       "desc": "Paradajz pelat, kackavalj, bosiljak, masline",
       "price": 440.0
    },
    {
-      "category": "pica",
+      "category": "hrana",
       "name": "Vesuvio",
       "desc": "Paradajz pelat, kackavalj, sunka",
       "price": 490.0
    },
    {
-      "category": "pica",
+      "category": "hrana",
       "name": "Meksicana",
       "desc": "Paradajz pelat, kackavalj, ljuta kobasica, tabasko sos, feferoni",
       "price": 640.0
    },
    {
-      "category": "pica",
+      "category": "hrana",
       "name": "Quattro Stagioni",
       "desc": "Paradajz pelat, kackavalj, sunka, jaja, pecurke, pavlaka",
       "price": 680.0
