@@ -1,0 +1,19 @@
+html
+    head
+        title=title
+        meta(charset='utf-8')
+        link(rel='stylesheet', href='/stylesheets/loginstyle.css')
+        link(rel='stylesheet', href="https://fonts.googleapis.com/css?family=Kaushan+Script&display=swap")
+    body
+        .loginbox
+            .header
+                h1 VTŠ
+                h2 Restoran
+            h1 Prijavite se da biste nastavili
+            form(action="/login" method="post")
+                p Korisničko ime:
+                input(type="text", name="username", placeholder="Unesite korisničko ime")
+                p Lozinka:
+                input(type="password", name="password", placeholder="Unesite lozinku")
+                input(type="submit", name="" value="Prijavite se")
+                a(href="#") Zaboravili ste lozinku?

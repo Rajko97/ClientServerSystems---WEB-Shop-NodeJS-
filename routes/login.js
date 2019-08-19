@@ -3,18 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const constants = require('./../constants');
 
-router.get("/", (req, res) => {
-  res.send(`
-    <h1>Uloguj se</h1>
-    <form method='post' action='/login'>
-      <input type='text' name='username' placeholder='Username' required/>
-      <input type='password' name='password' placeholder='Password' required/>
-      <input type='submit'/>
-    </form>
-  `);
+router.get('/', (req, res) => {
+  res.render('login', {title: 'Prijavi se'});
 });
 
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
     const {tableID, username, password} = req.body;
 
     if(tableID != null && username == null) {
