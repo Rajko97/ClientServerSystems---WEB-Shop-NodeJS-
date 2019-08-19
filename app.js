@@ -6,6 +6,7 @@ const logger = require('morgan');
 const jwtVerifer = require('express-jwt');
 const mongoose= require('mongoose');
 const constants = require('./constants');
+const session = require('express-session');
 
 mongoose.connect(constants.dbPath, {useNewUrlParser:true});
 
@@ -29,10 +30,46 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/login', loginRouter);
+app.use(session({
+  name:'sid',
+  resave: false,
+  saveUninitialized: false,
+  secret:'canYouKeepMySecretPlease?',
+  cookie: {
+    sameSite:true,
+    secure: false//todo true
+  }
+}));
+
+function checkIfNotLoggedIn(req, res, next) {
+  if(req.session.userType != 'worker') {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+}
+
+function checkIfLoggedIn(req, res, next) {
+  if(req.session.userType == 'worker') {
+    res.redirect('/');
+  } else {
+    next();
+  }
+}
+
+app.use('/login', checkIfLoggedIn, loginRouter);
 app.use('/menu', jwtVerifer({secret:constants.jwt_secret}), menuRouter);
 app.use('/order', jwtVerifer({secret:constants.jwt_secret}), orderRouter);
-app.use('/', indexRouter);
+app.use('/', checkIfNotLoggedIn, indexRouter);
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if(err) {
+      return res.redirect('/');
+    }
+    res.clearCookie('sid');
+    res.redirect('/login');
+  })
+});
 
 app.use(function(req, res, next) {
   next(createError(404));

@@ -4,7 +4,7 @@ mixin nav(title, style, type)
     nav(role="navigation", class=["navbar", "navbar-"+style])
         a.navbar-brand(href="#")=title
         if type == 1
-            button.navbar-text.btn.btn-danger.pull-right.logoutBtn Odjavi se
+            button#btnLogOut.navbar-text.btn.btn-danger.pull-right Odjavi se
 //- End navbar mixins
 
 //- panel mixins
