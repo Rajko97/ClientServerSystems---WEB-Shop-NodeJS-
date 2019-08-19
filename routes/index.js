@@ -17,7 +17,7 @@ function waitForDataBeingReady() {
       for (const item of docs) {
         result.push(await createReformatedOrder(JSON.parse(JSON.stringify(item))));  
       }
-      res(result);    
+      res(result.reverse());    
     });
   });
 }

@@ -37,13 +37,13 @@ function insertOrders() {
         let object = {};
         object['tableId'] = Math.floor(Math.random() * 10);
         object['orders'] = [];
-        //object['postedAt'] = Date.now();
+        object['posted'] = Date.now(); //todo odraditi preko scheme-e
         for (let j = 0; j <= Math.floor(Math.random() * 2); j++) { 
           let element = {};
           element['_id'] = docs[Math.floor(Math.random() * docs.length)]['_id'];
           element['count'] = Math.floor(Math.random() * 3) +1;
           object['orders'].push(element);
-        }
+        }                   
         ordersModel.collection.insertOne(object, {upsert:true, setDefaultsOnInsert: true});
       }
       res(true);
