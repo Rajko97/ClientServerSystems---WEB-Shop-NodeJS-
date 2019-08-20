@@ -43,6 +43,7 @@ app.use(session({
 
 function checkIfNotLoggedIn(req, res, next) {
   if(req.session.userType != 'worker') {
+    req.session.errorMessage = 'Greška! Nemate pristup traženom dokumentu!'
     res.redirect('/login');
   } else {
     next();

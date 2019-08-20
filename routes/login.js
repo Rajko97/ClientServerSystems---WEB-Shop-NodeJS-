@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const constants = require('./../constants');
 
 router.get('/', (req, res) => {
-  res.render('login', {title: 'Prijavi se'});
+  res.render('login', {title: 'Prijavi se', message: req.session.errorMessage});
+  req.session.errorMessage = null;
 });
 
 router.post('/', (req, res) => {
@@ -22,6 +23,7 @@ router.post('/', (req, res) => {
         req.session.userType = 'worker'; 
         return res.redirect('/');
       } else {
+        req.session.errorMessage = 'Greška! Korisničko ime i lozinka se ne podudaraju!';
         return res.redirect('/login');
       }
     }
