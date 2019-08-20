@@ -11,7 +11,7 @@ mixin nav(title, style, type)
 mixin panel(tableID, postedAt, style)
     -var style = (typeof style === 'undefined') ? "default" : style
     -let date = new Date(postedAt)
-    -let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    -let months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
     -let minutesPrefix = date.getMinutes()<10?'0':'';
     -let formated = months[date.getMonth()]+' '+date.getDate()+', '+date.getFullYear()+' - '+ date.getHours()+':'+minutesPrefix+ date.getMinutes()
 
