@@ -10,3 +10,24 @@ body {
 a {
   color: #00B7FF;
 }
+
+#shadowContainer {
+  min-height: 31px;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+}
+#orders {
+  padding: 10px;
+}
+
+#empty {
+  padding-top: 80px;
+  padding-bottom: 120px;
+  display: none;
+  color: grey;
+  text-align: center;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+#empty img {
+  margin-top: 80px;
+}

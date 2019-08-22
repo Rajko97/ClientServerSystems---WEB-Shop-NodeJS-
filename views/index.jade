@@ -2,8 +2,12 @@ extends layout
 
 block content
   +nav('Dobrodošli u VTŠ Restoran', 'default', 1)
-  #orders
-    each post in data
-      +panel(post['tableId'], post['postedAt'])
-        each order in post['orders']
-          p=order['count']+'x '+order['name']+' ('+order['price']+' RSD)'
+  #empty
+    div='Trenutno nema porudžbina. Sačekajte da neko poruči...'
+    img(src="images/waiting.gif")
+  #shadowContainer
+    #orders
+      each post in data
+        +panel(post['tableId'], post['postedAt'])
+          each order in post['orders']
+            p=order['count']+'x '+order['name']+' ('+order['price']+' RSD)'

@@ -18,7 +18,10 @@ mixin panel(tableID, postedAt, style)
     div(class=["panel", "panel-" + style] )
         .panel-heading.div
             .pull-left='Narudžbina za sto broj: '+tableID
-            .pull-right=' Vreme: ' + formated
+            .pull-right.row
+                .col-xs-10=' Vreme: ' + formated
+                .col-xs-2
+                    button(type="button" onClick="deleteOrder(this)" )='x'
             .clearfix
         .panel-body
             block
