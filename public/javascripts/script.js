@@ -20,9 +20,16 @@ $('#btnLogOut').on('click', function(event) {
   window.location.href= "/logout";
 }); 
 
-function deleteOrder(button)
+function deleteOrder(button, postId)
 {
   $(button).prop('disabled', true);
+  $.ajax({
+    type: 'DELETE',
+    url: 'http://localhost:3000/delete/'+postId,
+    success: function(msg) {
+      console.log('Succ: '+msg);
+    }
+  });
 
   let child = button;
   let parent = button.parentNode;

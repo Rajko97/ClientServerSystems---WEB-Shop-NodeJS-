@@ -3,7 +3,7 @@ const router = express.Router();
 const ordersModel = require('../model/orders');
 const createReformatedOrder = require('../controller/createReformatedOrder');
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
     const io = require('../controller/socket').getio();
 
     const {tableId, orders} = req.body;

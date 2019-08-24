@@ -18,6 +18,7 @@ const loginRouter = require('./routes/login');
 const menuRouter = require('./routes/menu');
 const orderRouter = require('./routes/order');
 const indexRouter = require('./routes/index');
+const deleteRouter = require('./routes/delete');
 
 const app = express();
 
@@ -41,7 +42,7 @@ app.use(session({
   }
 }));
 
-function checkIfNotLoggedIn(req, res, next) {
+function requireAuthorization(req, res, next) {
   if(req.session.userType != 'worker') {
     req.session.errorMessage = 'Greška! Nemate pristup traženom dokumentu!'
     res.redirect('/login');
@@ -50,7 +51,7 @@ function checkIfNotLoggedIn(req, res, next) {
   }
 }
 
-function checkIfLoggedIn(req, res, next) {
+function requireNOTauthorized(req, res, next) {
   if(req.session.userType == 'worker') {
     res.redirect('/');
   } else {
@@ -58,10 +59,11 @@ function checkIfLoggedIn(req, res, next) {
   }
 }
 
-app.use('/login', checkIfLoggedIn, loginRouter);
+app.use('/login', requireNOTauthorized, loginRouter);
 app.use('/menu', jwtVerifer({secret:constants.jwt_secret}), menuRouter);
 app.use('/order', jwtVerifer({secret:constants.jwt_secret}), orderRouter);
-app.use('/', checkIfNotLoggedIn, indexRouter);
+app.use('/', requireAuthorization, indexRouter);
+app.use('/delete', requireAuthorization, deleteRouter);
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if(err) {
@@ -78,7 +80,7 @@ app.use(function(req, res, next) {
 
 app.use(function(err, req, res, next) {
   if(err.name === 'UnauthorizedError') {
-    return res.send('Nemas pristup, saljem te na login formu. ('+err.message+')');
+    return res.send('Greska pri autorizaciji ('+err.message+')');
   }
   // set locals, only providing error in development
   res.locals.message = err.message;

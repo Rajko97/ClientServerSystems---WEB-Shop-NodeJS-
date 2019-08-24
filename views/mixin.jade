@@ -8,7 +8,7 @@ mixin nav(title, style, type)
 //- End navbar mixins
 
 //- panel mixins
-mixin panel(tableID, postedAt, style)
+mixin panel(id, tableID, postedAt, style)
     -var style = (typeof style === 'undefined') ? "default" : style
     -let date = new Date(postedAt)
     -let months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
@@ -21,8 +21,9 @@ mixin panel(tableID, postedAt, style)
             .pull-right.row
                 .col-xs-10=' Vreme: ' + formated
                 .col-xs-2
-                    button(type="button" onClick="deleteOrder(this)" )='x'
+                    button(type="button" onClick=`deleteOrder(this, "${id}")` )='x'
             .clearfix
         .panel-body
             block
 //- panel mixins
+//-, "${id}"

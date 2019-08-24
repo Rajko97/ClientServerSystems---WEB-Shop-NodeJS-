@@ -1,6 +1,7 @@
 const menuModel = require("../model/menu");
 
 async function createReformatedOrder(clientOrder) {
+    const id = clientOrder['_id'];
     const postedAt = clientOrder['posted'];
     const tableId = clientOrder['tableId'];
     const formatedOrders = [];
@@ -10,7 +11,7 @@ async function createReformatedOrder(clientOrder) {
         formatedOrder['count'] = order['count'];
         formatedOrders.push(formatedOrder);
     }
-    return {postedAt: postedAt, tableId: tableId, orders: formatedOrders}
+    return {_id: id, postedAt: postedAt, tableId: tableId, orders: formatedOrders}
   }
   
   function getNamePriceFromID(orderId) {

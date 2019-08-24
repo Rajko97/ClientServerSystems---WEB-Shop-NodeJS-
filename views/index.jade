@@ -8,6 +8,6 @@ block content
   #shadowContainer
     #orders
       each post in data
-        +panel(post['tableId'], post['postedAt'])
+        +panel(post['_id'], post['tableId'], post['postedAt'])
           each order in post['orders']
             p=order['count']+'x '+order['name']+' ('+order['price']+' RSD)'
