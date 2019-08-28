@@ -1,4 +1,4 @@
-const socket = io.connect('http://localhost:3000');
+const socket = io();
 
 let elementOrdersContainer = document.getElementById('orders');
 let elementEmptyMessage = document.getElementById("empty");
@@ -13,6 +13,7 @@ socket.on('orders', (data) => {
   elementEmptyMessage.style.display = "none";
   elementShadowContainer.style.display = "block";
   createOrder(data);
+  animateNewElement();
 });
 
 $('#btnLogOut').on('click', function(event) {
@@ -25,10 +26,7 @@ function deleteOrder(button, postId)
   $(button).prop('disabled', true);
   $.ajax({
     type: 'DELETE',
-    url: 'http://localhost:3000/delete/'+postId,
-    success: function(msg) {
-      console.log('Succ: '+msg);
-    }
+    url: '/delete/'+postId
   });
 
   let child = button;
@@ -82,15 +80,15 @@ function deleteOrder(button, postId)
 }
 
 function createOrder(data) {
-  let date = new Date(data.postedAt)
-  let months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
-  let minutesPrefix = date.getMinutes()<10?'0':'';
-  let formated = months[date.getMonth()]+' '+date.getDate()+', '+date.getFullYear()+' - '+ date.getHours()+':'+minutesPrefix+ date.getMinutes()
+  const date = new Date(data.postedAt)
+  const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
+  const minutesPrefix = date.getMinutes()<10?'0':'';
+  const formated = months[date.getMonth()]+' '+date.getDate()+', '+date.getFullYear()+' - '+ date.getHours()+':'+minutesPrefix+ date.getMinutes()
 
-  let orders = "";
-  for (order of data.orders) {
-    orders += `<p>${order['count']}x ${order['name']} (${order['price']} RSD)</p>`;
-  }
+  
+  const orders = data.orders.map(order => {
+    return `<p>${order['count']}x ${order['name']} (${order['price']} RSD)</p>`;
+  }).join();
 
   const postHtml = `<div class="panel panel-default">
       <div class="panel-heading">
@@ -110,7 +108,9 @@ function createOrder(data) {
     </div>`;
   
   elementOrdersContainer.innerHTML = postHtml + elementOrdersContainer.innerHTML;
+}
 
+function animateNewElement() {
   let newElement = document.getElementsByClassName("panel")[0];
   let elementHeight = newElement.clientHeight;
   newElement.style.display = "none";

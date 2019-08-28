@@ -80,7 +80,7 @@ app.use(function(req, res, next) {
 
 app.use(function(err, req, res, next) {
   if(err.name === 'UnauthorizedError') {
-    return res.send('Greska pri autorizaciji ('+err.message+')');
+    return res.status(403).send('Greska pri autorizaciji ('+err.message+')');
   }
   // set locals, only providing error in development
   res.locals.message = err.message;
