@@ -1,25 +1,20 @@
 const menuModel = require("../model/menu");
 
 async function createReformatedOrder(clientOrder) {
-    const id = clientOrder['_id'];
-    const postedAt = clientOrder['posted'];
-    const tableId = clientOrder['tableId'];
-    const formatedOrders = [];
-    
-    for (const order of clientOrder.orders) {
-        const formatedOrder = await getNamePriceFromID(order['_id']);
-        formatedOrder['count'] = order['count'];
-        formatedOrders.push(formatedOrder);
-    }
-    return {_id: id, postedAt: postedAt, tableId: tableId, orders: formatedOrders}
+  return {
+    _id: clientOrder['_id'],
+    postedAt: clientOrder['posted'],
+    tableId: clientOrder['tableId'],
+    orders: await Promise.all(clientOrder['orders'].map(order => getNamePriceFromID(order['_id'], order['count'])))
   }
-  
-  function getNamePriceFromID(orderId) {
-    return new Promise((res, rej) => {
-      menuModel.findById(orderId, (err, doc) => {
-        res({name: doc.name, price: doc.price});
-      });
+}
+
+function getNamePriceFromID(orderId, count) {
+  return new Promise((res, rej) => {
+    menuModel.findById(orderId, (err, doc) => {
+      res({count: count, name: doc.name, price: doc.price});
     });
-  }
-  
-  module.exports = createReformatedOrder;
+  });
+}
+
+module.exports = createReformatedOrder;
